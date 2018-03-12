@@ -62,14 +62,11 @@ public class MainActivity extends Activity implements SensorEventListener {
                             gotoActivity(RuleActivity.class);
                         }
                         if (pos == 2) {
-                            Toast.makeText(getApplicationContext(), "点击菜单按钮2执行方法",
-                                    Toast.LENGTH_SHORT).show();
-
+                            gotoActivity(MicDemoActivity.class);
                         }
                         if (pos == 3) {
                             Toast.makeText(getApplicationContext(), "点击菜单按钮3执行方法",
                                     Toast.LENGTH_SHORT).show();
-
                         }
                         if (pos == 4) {
                             Toast.makeText(getApplicationContext(), "点击菜单按钮4执行方法",

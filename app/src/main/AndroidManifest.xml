@@ -34,6 +34,7 @@
             android:name=".RuleActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity android:name=".MicDemoActivity"></activity>
     </application>
 
 </manifest>
