@@ -55,8 +55,9 @@ public class MainActivity extends Activity implements SensorEventListener {
                     @Override
                     public void itemClick(View view, int pos) {
                         if (pos == 0) {
-                            Toast.makeText(getApplicationContext(), "点击菜单按钮0执行方法",
-                                    Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(MainActivity.this,
+                                    CamerActivity.class);
+                            startActivity(intent);
                         }
                         if (pos == 1) {
                             Toast.makeText(getApplicationContext(), "点击菜单按钮1执行方法",

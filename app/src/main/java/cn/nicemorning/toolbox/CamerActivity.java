@@ -2,13 +2,16 @@ package cn.nicemorning.toolbox;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.SeekBar;
 
 /**
  * Created by Nicemorning on 12-Mar-18.
@@ -29,6 +32,7 @@ public class CamerActivity extends Activity implements SurfaceHolder.Callback {
     private static final int PREVIEW_WIDTH = 320;
     private static final int PREVIEW_HEIGHT = 240;
     private int mZoomMax;
+    private SeekBar mSeekBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +47,25 @@ public class CamerActivity extends Activity implements SurfaceHolder.Callback {
         holder = mSurfaceView.getHolder();
         holder.addCallback(this);
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        mSeekBar = findViewById(R.id.seekBar);
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                value = progress + 50;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                parameters.setZoom(value);
+                mCamera.setParameters(parameters);
+                mCamera.startPreview();
+            }
+        });
     }
 
     @Override
@@ -76,6 +99,38 @@ public class CamerActivity extends Activity implements SurfaceHolder.Callback {
         if (mCamera != null) {
             mCamera.setDisplayOrientation(mCameraId == BACK_CAMERA ? ROTATION : ROTATION);
             parameters = mCamera.getParameters();
+            parameters.setPictureFormat(PixelFormat.JPEG);
+            parameters.set("orientation", "portrait");
+            parameters.setPreviewSize(PREVIEW_WIDTH, PREVIEW_HEIGHT);
+            parameters.setRotation(mCameraId == BACK_CAMERA ? ROTATION : REVERT + ROTATION);
+            mZoomMax = value;
+            parameters.setZoom(mZoomMax);
+            mCamera.setParameters(parameters);
+            try {
+                mCamera.setPreviewDisplay(holder);
+                mCamera.startPreview();
+                mFlag = true;
+            } catch (Exception e) {
+                mCamera.release();
+                Log.d("CamerActivity", e.getMessage());
+            }
         }
+    }
+
+    public void surfaceChanged(SurfaceHolder holder, int format, int PREVIEW_WIDTH,
+                               int PREVIEW_HEIGHT) {
+        startCamera();
+    }
+
+    public void surfaceCreated(SurfaceHolder holder) {
+
+    }
+
+    public void surfaceDestroyed(SurfaceHolder holder) {
+
+    }
+
+    public void onBack(View view) {
+        CamerActivity.this.finish();
     }
 }
