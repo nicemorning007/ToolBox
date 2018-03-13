@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import cn.nicemorning.toolbox.util.ElectricityBR;
+import cn.nicemorning.toolbox.util.PowerLED;
 import cn.nicemorning.toolbox.view.CircleMenuLayout;
 
 public class MainActivity extends Activity implements SensorEventListener {
@@ -37,11 +38,14 @@ public class MainActivity extends Activity implements SensorEventListener {
             R.drawable.battery2, R.drawable.battery3};
     private int[] batterystatuspercent = {75, 30, 0};
     private Intent intent;
+    private boolean status = false;
+    private PowerLED powerLED;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        powerLED = new PowerLED(this);
         image_znz = findViewById(R.id.iv_znz);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this,
@@ -65,8 +69,7 @@ public class MainActivity extends Activity implements SensorEventListener {
                             gotoActivity(MicDemoActivity.class);
                         }
                         if (pos == 3) {
-                            Toast.makeText(getApplicationContext(), "点击菜单按钮3执行方法",
-                                    Toast.LENGTH_SHORT).show();
+                            onFlashLight();
                         }
                         if (pos == 4) {
                             Toast.makeText(getApplicationContext(), "点击菜单按钮4执行方法",
@@ -115,6 +118,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     protected void onPause() {
         super.onPause();
         sensorManager.unregisterListener(this);
+        powerLED.destroy();
     }
 
     @Override
@@ -123,6 +127,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         sensorManager.registerListener(this,
                 sensorManager.getDefaultSensor((Sensor.TYPE_ORIENTATION)),
                 SensorManager.SENSOR_DELAY_GAME);
+        powerLED = new PowerLED(this);
     }
 
     private BroadcastReceiver batInfoReceiver = new BroadcastReceiver() {
@@ -155,6 +160,17 @@ public class MainActivity extends Activity implements SensorEventListener {
         ElectricityBR electricityBR = new ElectricityBR();
         IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         MainActivity.this.registerReceiver(electricityBR, filter);
+    }
+
+    public void onFlashLight() {
+        powerLED.turnOff();
+        if (!status) {
+            status = true;
+            powerLED.turnOn();
+        } else {
+            status = false;
+            powerLED.turnOff();
+        }
     }
 
 }

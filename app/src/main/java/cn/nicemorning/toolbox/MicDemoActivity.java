@@ -19,7 +19,7 @@ import java.text.DecimalFormat;
 
 public class MicDemoActivity extends Activity {
     private MicrophoneThread microphoneThread = new MicrophoneThread();
-    private MediaRecorder mARecorder;
+    private MediaRecorder mARecorder = new MediaRecorder();
     private boolean istrue = true;
     private File mAudiofile, mSampleDir;
     private ImageView iv_record_wave_left, iv_record_wave_right;
@@ -50,16 +50,6 @@ public class MicDemoActivity extends Activity {
         init();
     }
 
-    private void init() {
-        textView = findViewById(R.id.textView1);
-        iv_record_wave_left = findViewById(R.id.iv_record_wave_left);
-        iv_record_wave_right = findViewById(R.id.iv_record_wave_right);
-        ad_left = (AnimationDrawable) iv_record_wave_left.getBackground();
-        ad_right = (AnimationDrawable) iv_record_wave_right.getBackground();
-        ad_left.start();
-        ad_right.start();
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -81,6 +71,16 @@ public class MicDemoActivity extends Activity {
         }
         mARecorder.start();
         microphoneThread.start();
+    }
+
+    private void init() {
+        textView = findViewById(R.id.textView1);
+        iv_record_wave_left = findViewById(R.id.iv_record_wave_left);
+        iv_record_wave_right = findViewById(R.id.iv_record_wave_right);
+        ad_left = (AnimationDrawable) iv_record_wave_left.getBackground();
+        ad_right = (AnimationDrawable) iv_record_wave_right.getBackground();
+        ad_left.start();
+        ad_right.start();
     }
 
     public void onBack(View view) {
