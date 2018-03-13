@@ -6,3 +6,9 @@ Android practise project 4,《ToolBox》
 ### Finish time：13/Mar./2018
 
 Give permission before you run this app.
+
+### Needs permission
+
+1. Camera
+2. Audio recoder
+3. Read and write external storage
